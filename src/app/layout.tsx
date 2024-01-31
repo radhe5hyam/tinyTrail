@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Roboto, Roboto_Mono } from "next/font/google";
-import ThemeToggle from "../components/ThemeToggle";
 import { ThemeProvider } from "./themeProvider";
 import "./globals.css";
 
@@ -31,9 +30,6 @@ export default function RootLayout({
       <head />
       <body className="min-h-screen bg-[radial-gradient(ellipse_at_left,_var(--tw-gradient-stops))] from-[#6366f1] via-[#a5b4fc] to-[#e0e7ff] dark:bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] dark:from-[#27272a] dark:via-[#52525b] dark:to-[#a1a1aa] bg-cover bg-no-repeat">
         <ThemeProvider>
-          <header className="p-4 flex justify-end">
-            <ThemeToggle />
-          </header>
           <main>{children}</main>
         </ThemeProvider>
       </body>

@@ -1,12 +1,14 @@
 "use client";
 import React, { useState } from "react";
 import { TbHomeLink } from "react-icons/tb";
+import ThemeToggle from "../components/ThemeToggle";
 import ShortUrlForm from "@/components/ShortUrlForm";
 import ShortUrlDisplay from "@/components/ShortUrlDisplay";
 
 export default function Home() {
   const [longUrl, setLongUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
+  const [expiry, setExpiry] = React.useState<Date | undefined>(new Date());
   const [isShortened, setIsShortened] = useState(false);
 
   const handleShorten = async () => {
@@ -16,7 +18,7 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ original: longUrl }),
+        body: JSON.stringify({ original: longUrl, expiry }),
       });
       const data = await response.json();
       setShortUrl(window.location.origin + "/api/" + data.short);
@@ -47,8 +49,11 @@ export default function Home() {
   };
 
   return (
-    <main className="flex flex-col items-center justify-center h-screen">
-      <div className="px-6 shadow-2xl rounded-xl bg-[#DAD2FF] dark:bg-[#4C585B] flex flex-col items-center justify-center min-w-1/3 min-h-1/2 fixed left-0 top-1/4 ml-4">
+    <main className="flex flex-col items-center h-screen justify-center">
+      <header className="p-4 flex justify-end w-full fixed top-0 left-0 right-0">
+        <ThemeToggle />
+      </header>
+      <div className="px-8 py-6 shadow-2xl rounded-xl bg-[#DAD2FF] dark:bg-[#4C585B] flex flex-col items-center mt-[20%] mb-[25%] mx-[30%] w-full max-w-3xl">
         <TbHomeLink className="my-4 text-4xl" />
         <h6 className="text-xl mb-4">Shorten your URL</h6>
 
@@ -56,6 +61,7 @@ export default function Home() {
           <ShortUrlForm
             longUrl={longUrl}
             setLongUrl={setLongUrl}
+            setExpiry={setExpiry}
             handleShorten={handleShorten}
           />
         ) : (
