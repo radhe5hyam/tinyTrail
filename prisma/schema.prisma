@@ -9,3 +9,11 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model ShortUrl {
+  id        Int      @id @default(autoincrement())
+  original  String
+  short     String   @unique
+  createdAt DateTime @default(now())
+  expiresAt DateTime @default(dbgenerated("(now() + interval '7 days')"))
+}
