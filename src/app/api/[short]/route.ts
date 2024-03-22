@@ -26,7 +26,13 @@ export async function GET(req: NextRequest) {
         { status: 410 }
       );
     }
-    return NextResponse.redirect(shortUrl.original);
+
+    let originalUrl = shortUrl.original;
+    if (!/^https?:\/\//i.test(originalUrl)) {
+      originalUrl = "https://" + originalUrl;
+    }
+
+    return NextResponse.redirect(originalUrl);
   } else {
     return NextResponse.json(
       { message: "Short URL not found." },
