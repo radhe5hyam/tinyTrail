@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../lib/db";
+import redis from "../../../lib/redis";
 
 export async function GET(req: NextRequest) {
   const { pathname } = new URL(req.url);
@@ -12,10 +13,15 @@ export async function GET(req: NextRequest) {
     );
   }
 
+  // Check redis cache
+  const cachedUrl = await redis.get<string>(short);
+  if (cachedUrl) {
+    return NextResponse.redirect(cachedUrl);
+  }
+
   const shortUrl = await prisma.shortUrl.findUnique({
     where: { short },
   });
-  console.log("shorturl: " + JSON.stringify(shortUrl));
 
   if (shortUrl) {
     if (new Date() > new Date(shortUrl.expiresAt)) {
@@ -29,6 +35,9 @@ export async function GET(req: NextRequest) {
     if (!/^https?:\/\//i.test(originalUrl)) {
       originalUrl = "https://" + originalUrl;
     }
+
+    // Update cache
+    await redis.set(short, originalUrl);
 
     return NextResponse.redirect(originalUrl);
   } else {
