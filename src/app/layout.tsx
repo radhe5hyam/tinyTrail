@@ -7,17 +7,17 @@ import "./globals.css";
 const roboto = Roboto({
   variable: "--font-roboto",
   subsets: ["latin"],
-  weight: ["400"], // Specify the weight
+  weight: ["400"],
 });
 
 const robotoMono = Roboto_Mono({
   variable: "--font-roboto-mono",
   subsets: ["latin"],
-  weight: ["400"], // Specify the weight
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
-  title: "TinyTrail",
+  title: "Tiny Trail",
   description: "yet another url shortner",
 };
 
