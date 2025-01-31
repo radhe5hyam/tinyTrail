@@ -49,11 +49,14 @@ export default function Home() {
   };
 
   return (
-    <main className="flex flex-col items-center h-screen justify-center">
-      <header className="p-4 flex justify-end w-full fixed top-0 left-0 right-0">
+    <main className="flex flex-col items-center h-screen">
+      <header className="p-4 flex justify-end w-full">
         <ThemeToggle />
       </header>
-      <div className="px-8 py-6 shadow-2xl rounded-xl bg-[#DAD2FF] dark:bg-[#4C585B] flex flex-col items-center mt-[20%] mb-[25%] mx-[30%] w-full max-w-3xl">
+      <div
+        className="flex flex-col items-center justify-center flex-grow px-8 py-6 shadow-2xl rounded-xl bg-[#DAD2FF] dark:bg-[#4C585B] w-full max-w-3xl"
+        style={{ marginTop: "20vh", marginBottom: "10vh" }}
+      >
         <TbHomeLink className="my-4 text-4xl" />
         <h6 className="text-xl mb-4">Shorten your URL</h6>
 
@@ -73,6 +76,20 @@ export default function Home() {
           />
         )}
       </div>
+      <footer className="p-4 text-center w-full">
+        <p>
+          Made with <span className="text-red-500 dark:text-red-400">❤</span> by{" "}
+          <a
+            href="https://github.com/radhe5hyam"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 dark:text-blue-400"
+          >
+            @radhe5hyam
+          </a>
+        </p>
+        <p>Copyright © 2025</p>
+      </footer>
     </main>
   );
 }
