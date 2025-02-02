@@ -1,15 +1,30 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TbHomeLink } from "react-icons/tb";
 import ThemeToggle from "../components/ThemeToggle";
-import ShortUrlForm from "@/components/ShortUrlForm";
-import ShortUrlDisplay from "@/components/ShortUrlDisplay";
+import ShortUrlForm from "../components/ShortUrlForm"; // Updated import path
+import ShortUrlDisplay from "../components/ShortUrlDisplay";
+import UrlList from "../components/UrlList";
+
+interface Url {
+  longUrl: string;
+  shortUrl: string;
+}
 
 export default function Home() {
   const [longUrl, setLongUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
   const [expiry, setExpiry] = React.useState<Date | undefined>(new Date());
   const [isShortened, setIsShortened] = useState(false);
+  const [urls, setUrls] = useState<Url[]>([]);
+  const [showUrls, setShowUrls] = useState(false);
+
+  useEffect(() => {
+    const storedUrls = JSON.parse(
+      localStorage.getItem("shortenedUrls") || "[]"
+    );
+    setUrls(storedUrls);
+  }, []);
 
   const handleShorten = async () => {
     try {
@@ -21,17 +36,23 @@ export default function Home() {
         body: JSON.stringify({ original: longUrl, expiry }),
       });
       const data = await response.json();
-      setShortUrl(window.location.origin + "/api/" + data.short);
+      const newShortUrl = window.location.origin + "/api/" + data.short;
+      setShortUrl(newShortUrl);
       setIsShortened(true);
+
+      const newUrl = { longUrl, shortUrl: newShortUrl };
+      const updatedUrls = [...urls, newUrl];
+      setUrls(updatedUrls);
+      localStorage.setItem("shortenedUrls", JSON.stringify(updatedUrls));
     } catch (error) {
       console.error("Error shortening URL:", error);
     }
   };
 
-  const handleCopy = () => {
-    if (navigator.clipboard && shortUrl) {
+  const handleCopy = (url: string) => {
+    if (navigator.clipboard && url) {
       navigator.clipboard
-        .writeText(shortUrl)
+        .writeText(url)
         .then(() => {
           console.log("Text copied to clipboard");
         })
@@ -39,18 +60,26 @@ export default function Home() {
           console.error("Could not copy text: ", err);
         });
     } else {
-      console.error("Clipboard API not supported or shortUrl is undefined");
+      console.error("Clipboard API not supported or url is undefined");
     }
   };
+
   const handleReset = () => {
     setLongUrl("");
     setShortUrl("");
     setIsShortened(false);
   };
 
+  const toggleUrls = () => {
+    setShowUrls(!showUrls);
+  };
+
   return (
     <main className="flex flex-col items-center h-screen">
-      <header className="p-4 flex justify-end w-full">
+      <header className="p-4 flex justify-between w-full">
+        <button onClick={toggleUrls} className="mr-auto">
+          My URLs
+        </button>
         <ThemeToggle />
       </header>
       <div
@@ -71,11 +100,14 @@ export default function Home() {
           <ShortUrlDisplay
             longUrl={longUrl}
             shortUrl={shortUrl}
-            handleCopy={handleCopy}
+            handleCopy={() => handleCopy(shortUrl)}
             handleReset={handleReset}
           />
         )}
       </div>
+      {showUrls && (
+        <UrlList urls={urls} handleCopy={handleCopy} toggleUrls={toggleUrls} />
+      )}
       <footer className="p-4 text-center w-full">
         <p>
           Made with <span className="text-red-500 dark:text-red-400">❤</span> by{" "}

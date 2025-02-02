@@ -1,8 +1,8 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "./ui/button";
 import { MdCopyAll, MdInsertLink, MdOpenInNew } from "react-icons/md";
 import { BsMagic } from "react-icons/bs";
-import { Input } from "@/components/ui/input";
+import { Input } from "./ui/input";
 
 interface ShortenedUrlDisplayProps {
   longUrl: string;

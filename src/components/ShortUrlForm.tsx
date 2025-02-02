@@ -1,15 +1,11 @@
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Calendar } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Calendar } from "./ui/calendar";
+import { cn } from "../lib/utils";
 import { format } from "date-fns";
 import { CiCalendarDate } from "react-icons/ci";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
+import { Popover, PopoverTrigger, PopoverContent } from "./ui/popover";
 
 interface UrlShortenerFormProps {
   longUrl: string;
